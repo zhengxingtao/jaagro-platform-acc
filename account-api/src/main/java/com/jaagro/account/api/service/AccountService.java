@@ -1,10 +1,10 @@
 package com.jaagro.account.api.service;
 
-import com.jaagro.account.api.dto.request.UpdateAccountDto;
+import com.jaagro.account.api.dto.request.BatchDeleteAccountDto;
 import com.jaagro.account.api.dto.request.CreateAccountDto;
-import com.jaagro.account.api.dto.response.AccountDto;
-
-import java.util.Map;
+import com.jaagro.account.api.dto.request.QueryAccountDto;
+import com.jaagro.account.api.dto.request.UpdateAccountDto;
+import com.jaagro.account.api.dto.response.AccountReturnDto;
 
 /**
  * 账户操作
@@ -31,7 +31,7 @@ public interface AccountService {
      * @param id
      * @return
      */
-    AccountDto getById(Integer id);
+    AccountReturnDto getById(Integer id);
 
     /**
      * 删除账户
@@ -39,4 +39,18 @@ public interface AccountService {
      * @return
      */
     boolean disableAccount(Integer id);
+
+    /**
+     * 查询账户
+     * @param queryAccountDto
+     * @return
+     */
+    AccountReturnDto getByQueryAccountDto(QueryAccountDto queryAccountDto);
+
+    /**
+     * 批量删除账户
+     * @param batchDeleteAccountDto
+     * @return
+     */
+    boolean batchDisableAccount(BatchDeleteAccountDto batchDeleteAccountDto);
 }

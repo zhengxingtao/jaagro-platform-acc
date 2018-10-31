@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Data
 @Accessors(chain = true)
-public class AccountDto implements Serializable{
+public class AccountReturnDto implements Serializable{
     /**
      * 账户id
      */

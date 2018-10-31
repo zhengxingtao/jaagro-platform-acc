@@ -6,7 +6,7 @@
         select
         <include refid="Base_Column_List" />
         from account
-        where 1 = 1
+        where account_status != 4
         <if test="accountType != null">
             and account_type = #{accountType,jdbcType=INTEGER}
         </if>
@@ -19,4 +19,17 @@
         limit 1;
     </select>
 
+    <update id="batchDisableAccount" >
+      update account
+      set version = version + 1,
+          account_status = 4,
+          modify_time = now(),
+          modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+    where user_id in
+        <foreach close=")" collection="userIdList" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        and account_type = #{accountType,jdbcType=INTEGER}
+        and user_type = #{userType,jdbcType=INTEGER}
+    </update>
 </mapper>

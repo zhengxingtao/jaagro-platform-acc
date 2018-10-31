@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
  * @author yj
  * @date 2018/10/24
  */
-@Repository
 public interface AccountChangeRecordMapperExt extends AccountChangeRecordMapper {
 }
