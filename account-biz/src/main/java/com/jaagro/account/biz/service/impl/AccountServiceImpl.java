@@ -14,10 +14,14 @@ import com.jaagro.account.biz.mapper.AccountMapperExt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * @author yj
@@ -46,7 +50,7 @@ public class AccountServiceImpl implements AccountService {
         account = new Account();
         BeanUtils.copyProperties(createAccountDto,account);
         generateAccount(account);
-        accountMapperExt.insert(account);
+        accountMapperExt.insertSelective(account);
         return account.getId();
     }
 
@@ -62,7 +66,10 @@ public class AccountServiceImpl implements AccountService {
         BeanUtils.copyProperties(updateAccountDto,account);
         account.setModifyTime(new Date());
         account.setModifyUserId(currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId());
-        accountMapperExt.updateByPrimaryKeySelective(account);
+        int i = accountMapperExt.updateByPrimaryKeySelective(account);
+        if (i < 1){
+            return false;
+        }
         return true;
     }
 
@@ -89,6 +96,7 @@ public class AccountServiceImpl implements AccountService {
      * @param id
      * @return
      */
+    @CacheEvict(cacheNames = "account",allEntries = true)
     @Override
     public boolean disableAccount(Integer id) {
         Account account = accountMapperExt.selectByPrimaryKey(id);
@@ -112,6 +120,7 @@ public class AccountServiceImpl implements AccountService {
      * @param queryAccountDto
      * @return
      */
+    @Cacheable
     @Override
     public AccountReturnDto getByQueryAccountDto(QueryAccountDto queryAccountDto) {
         Account account = accountMapperExt.selectActiveAccount(queryAccountDto.getAccountType(),queryAccountDto.getUserId(),queryAccountDto.getUserType());
@@ -129,12 +138,14 @@ public class AccountServiceImpl implements AccountService {
      * @param batchDeleteAccountDto
      * @return
      */
+    @CacheEvict(cacheNames = "account",allEntries = true)
     @Override
     public boolean batchDisableAccount(BatchDeleteAccountDto batchDeleteAccountDto) {
         Integer currentUserId = currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId();
         batchDeleteAccountDto.setModifyUserId(currentUserId);
         Integer effective = accountMapperExt.batchDisableAccount(batchDeleteAccountDto);
-        if(effective == batchDeleteAccountDto.getUserIdList().size()){
+        // 防止userId重复
+        if(effective == new HashSet<>(batchDeleteAccountDto.getUserIdList()).size()){
             return true;
         }
         log.warn("batchDisableAccount fail,batchDeleteAccountDto={},effective={}",batchDeleteAccountDto,effective);

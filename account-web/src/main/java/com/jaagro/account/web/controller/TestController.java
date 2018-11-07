@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author tony
@@ -38,9 +36,6 @@ public class TestController {
         return currentUserService.getCurrentUser();
     }
     public static void main (String[] args){
-        List<Integer> integerList = new ArrayList<Integer>();
-        integerList.add(1);
-        integerList.add(2);
-        System.out.println(JSON.toJSONString(integerList));
+        System.out.println(JSON.toJSONString(""+null));
     }
 }
