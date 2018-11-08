@@ -7,7 +7,6 @@ import com.jaagro.account.api.dto.request.QueryAccountDto;
 import com.jaagro.account.api.dto.request.UpdateAccountDto;
 import com.jaagro.account.api.dto.response.AccountReturnDto;
 import com.jaagro.account.api.service.AccountService;
-import com.jaagro.account.biz.mapper.AccountMapperExt;
 import com.jaagro.account.web.vo.AccountVo;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
@@ -33,8 +32,6 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-    @Autowired
-    private AccountMapperExt accountMapperExt;
     /**
      * 新增账户
      * @param createAccountDto
@@ -60,9 +57,6 @@ public class AccountController {
     @ApiOperation("修改账户")
     public BaseResponse updateAccount(@RequestBody @Validated UpdateAccountDto updateAccountDto){
         log.debug("updateAccount begin,{}",JSON.toJSONString(updateAccountDto));
-        if (accountMapperExt.selectByPrimaryKey(updateAccountDto.getId()) == null){
-            return BaseResponse.errorInstance(ResponseStatusCode.ID_VALUE_ERROR.getCode(),"id="+updateAccountDto.getId()+"不存在");
-        }
         boolean result = accountService.updateAccount(updateAccountDto);
         if (result){
             return BaseResponse.successInstance("修改账户成功");
