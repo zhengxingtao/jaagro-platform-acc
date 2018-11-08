@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -123,9 +122,6 @@ public class AccountController {
     @ApiOperation("批量删除账户")
     public BaseResponse batchDelete(@RequestBody @Validated BatchDeleteAccountDto batchDeleteAccountDto){
         log.debug("batchDelete begin,batchDeleteAccountDto={}",batchDeleteAccountDto);
-        if(CollectionUtils.isEmpty(batchDeleteAccountDto.getUserIdList())){
-           return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(),"用户id列表为空");
-        }
         boolean result = accountService.batchDisableAccount(batchDeleteAccountDto);
         if (result){
             return BaseResponse.successInstance("批量删除账户成功");
