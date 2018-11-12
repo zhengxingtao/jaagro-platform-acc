@@ -1,5 +1,6 @@
 package com.jaagro.account.biz.mapper;
 
+import com.jaagro.account.api.dto.request.BatchDeleteAccountDto;
 import com.jaagro.account.biz.entity.Account;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,6 @@ import java.util.List;
  * @date 2018/10/24
  */
 
-@Repository
 public interface AccountMapperExt extends AccountMapper {
     /**
      * 查询有效账户
@@ -22,4 +22,11 @@ public interface AccountMapperExt extends AccountMapper {
      * @return
      */
     Account selectActiveAccount(@Param("accountType") Integer accountType, @Param("userId") Integer userId, @Param("userType") Integer userType);
+
+    /**
+     * 批量删除账户
+     * @param batchDeleteAccountDto
+     * @return
+     */
+    Integer batchDisableAccount(BatchDeleteAccountDto batchDeleteAccountDto);
 }

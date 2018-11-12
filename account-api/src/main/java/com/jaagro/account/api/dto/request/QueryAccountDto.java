@@ -8,14 +8,12 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- *创建账户参数
  * @author yj
- * @date 2018/10/23
+ * @date 2018/10/25
  */
 @Data
 @Accessors(chain = true)
-public class CreateAccountDto implements Serializable{
-
+public class QueryAccountDto implements Serializable{
     /**
      * 用户id
      */

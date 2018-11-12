@@ -3,22 +3,25 @@ package com.jaagro.account.biz.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.jaagro.account.api.constant.AccountStatus;
 import com.jaagro.account.api.constant.AccountType;
-import com.jaagro.account.api.dto.request.UpdateAccountDto;
+import com.jaagro.account.api.dto.request.BatchDeleteAccountDto;
 import com.jaagro.account.api.dto.request.CreateAccountDto;
-import com.jaagro.account.api.dto.response.AccountDto;
+import com.jaagro.account.api.dto.request.QueryAccountDto;
+import com.jaagro.account.api.dto.request.UpdateAccountDto;
+import com.jaagro.account.api.dto.response.AccountReturnDto;
 import com.jaagro.account.api.service.AccountService;
 import com.jaagro.account.biz.entity.Account;
 import com.jaagro.account.biz.mapper.AccountMapperExt;
-import com.jaagro.utils.ResponseStatusCode;
-import com.jaagro.utils.ServiceResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Map;
+import java.util.HashSet;
 
 /**
  * @author yj
@@ -47,7 +50,7 @@ public class AccountServiceImpl implements AccountService {
         account = new Account();
         BeanUtils.copyProperties(createAccountDto,account);
         generateAccount(account);
-        accountMapperExt.insert(account);
+        accountMapperExt.insertSelective(account);
         return account.getId();
     }
 
@@ -63,7 +66,10 @@ public class AccountServiceImpl implements AccountService {
         BeanUtils.copyProperties(updateAccountDto,account);
         account.setModifyTime(new Date());
         account.setModifyUserId(currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId());
-        accountMapperExt.updateByPrimaryKeySelective(account);
+        int i = accountMapperExt.updateByPrimaryKeySelective(account);
+        if (i < 1){
+            return false;
+        }
         return true;
     }
 
@@ -74,12 +80,12 @@ public class AccountServiceImpl implements AccountService {
      * @return
      */
     @Override
-    public AccountDto getById(Integer id) {
+    public AccountReturnDto getById(Integer id) {
         Account account = accountMapperExt.selectByPrimaryKey(id);
         if (account == null){
             return null;
         }
-        AccountDto accountDto = new AccountDto();
+        AccountReturnDto accountDto = new AccountReturnDto();
         BeanUtils.copyProperties(account,accountDto);
         return accountDto;
     }
@@ -90,6 +96,7 @@ public class AccountServiceImpl implements AccountService {
      * @param id
      * @return
      */
+    @CacheEvict(cacheNames = "account",allEntries = true)
     @Override
     public boolean disableAccount(Integer id) {
         Account account = accountMapperExt.selectByPrimaryKey(id);
@@ -107,6 +114,44 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
 
+    /**
+     * 查询账户
+     *
+     * @param queryAccountDto
+     * @return
+     */
+    @Cacheable
+    @Override
+    public AccountReturnDto getByQueryAccountDto(QueryAccountDto queryAccountDto) {
+        Account account = accountMapperExt.selectActiveAccount(queryAccountDto.getAccountType(),queryAccountDto.getUserId(),queryAccountDto.getUserType());
+        if (account == null){
+            return null;
+        }
+        AccountReturnDto accountDto = new AccountReturnDto();
+        BeanUtils.copyProperties(account,accountDto);
+        return accountDto;
+    }
+
+    /**
+     * 批量删除账户
+     *
+     * @param batchDeleteAccountDto
+     * @return
+     */
+    @CacheEvict(cacheNames = "account",allEntries = true)
+    @Override
+    public boolean batchDisableAccount(BatchDeleteAccountDto batchDeleteAccountDto) {
+        Integer currentUserId = currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId();
+        batchDeleteAccountDto.setModifyUserId(currentUserId);
+        Integer effective = accountMapperExt.batchDisableAccount(batchDeleteAccountDto);
+        // 防止userId重复
+        if(effective == new HashSet<>(batchDeleteAccountDto.getUserIdList()).size()){
+            return true;
+        }
+        log.warn("batchDisableAccount fail,batchDeleteAccountDto={},effective={}",batchDeleteAccountDto,effective);
+        return false;
+    }
+
     private void generateAccount(Account account) {
         account.setVersion(0);
         account.setAccountStatus(AccountStatus.NORMAL);
@@ -114,5 +159,6 @@ public class AccountServiceImpl implements AccountService {
         account.setCreateTime(new Date());
         account.setCredit(new BigDecimal("0"));
         account.setDebit(new BigDecimal("0"));
+        account.setCreatedUserId(currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId());
     }
 }

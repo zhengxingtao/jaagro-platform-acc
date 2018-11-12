@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 /**
  * @author yj
  */
-@Repository
 public interface AccountMapper {
     /**
      *

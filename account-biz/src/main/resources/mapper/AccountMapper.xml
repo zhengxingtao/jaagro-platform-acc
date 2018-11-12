@@ -25,6 +25,7 @@
     <include refid="Base_Column_List" />
     from account
     where id = #{id,jdbcType=INTEGER}
+    and account_status != 4
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from account

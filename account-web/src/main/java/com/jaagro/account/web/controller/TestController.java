@@ -1,9 +1,10 @@
 package com.jaagro.account.web.controller;
 
-import com.jaagro.account.web.vo.AccountVo;
-import com.jaagro.constant.UserInfo;
+import com.alibaba.fastjson.JSON;
 import com.jaagro.account.api.service.UserClientService;
 import com.jaagro.account.biz.service.impl.CurrentUserService;
+import com.jaagro.account.web.vo.AccountVo;
+import com.jaagro.constant.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +34,8 @@ public class TestController {
 
         AccountVo  vo = new AccountVo();
         return currentUserService.getCurrentUser();
+    }
+    public static void main (String[] args){
+        System.out.println(JSON.toJSONString(""+null));
     }
 }
