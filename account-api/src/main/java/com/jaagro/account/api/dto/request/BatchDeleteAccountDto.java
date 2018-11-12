@@ -2,7 +2,6 @@ package com.jaagro.account.api.dto.request;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
@@ -38,6 +37,7 @@ public class BatchDeleteAccountDto implements Serializable {
     /**
      * 修改人
      */
-    @NotBlank
+    @NotNull(message = "{modifyUserId.NotNull}")
+    @Min(value = 1,message = "{modifyUserId.Min}")
     private Integer modifyUserId;
 }

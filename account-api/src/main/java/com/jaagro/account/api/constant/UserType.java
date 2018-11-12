@@ -9,9 +9,9 @@ public final class UserType {
     /**
      * 客户
      */
-    private static final Integer CUSTOMER = 1;
+    public static final Integer CUSTOMER = 1;
     /**
      * 司机
      */
-    private static final Integer DRIVER = 2;
+    public static final Integer DRIVER = 2;
 }

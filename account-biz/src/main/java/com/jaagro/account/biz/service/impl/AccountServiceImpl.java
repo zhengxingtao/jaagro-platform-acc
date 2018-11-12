@@ -159,6 +159,5 @@ public class AccountServiceImpl implements AccountService {
         account.setCreateTime(new Date());
         account.setCredit(new BigDecimal("0"));
         account.setDebit(new BigDecimal("0"));
-        account.setCreatedUserId(currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId());
     }
 }

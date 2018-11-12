@@ -13,12 +13,12 @@
     <result column="change_status" property="changeStatus" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-    <result column="created_user_id" property="createdUserId" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, account_id, change_type, biz_type, biz_refer_id, notes, balance, amount, change_status, 
-    create_time, modify_time, created_user_id, modify_user_id
+    create_time, modify_time, create_user_id, modify_user_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -34,12 +34,12 @@
     insert into account_change_record (id, account_id, change_type, 
       biz_type, biz_refer_id, notes, 
       balance, amount, change_status, 
-      create_time, modify_time, created_user_id, 
+      create_time, modify_time, create_user_id,
       modify_user_id)
     values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=INTEGER}, #{changeType,jdbcType=INTEGER}, 
       #{bizType,jdbcType=INTEGER}, #{bizReferId,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, 
       #{balance,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{changeStatus,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createdUserId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER},
       #{modifyUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.account.biz.entity.AccountChangeRecord" >
@@ -78,8 +78,8 @@
       <if test="modifyTime != null" >
         modify_time,
       </if>
-      <if test="createdUserId != null" >
-        created_user_id,
+      <if test="createUserId != null" >
+        create_user_id,
       </if>
       <if test="modifyUserId != null" >
         modify_user_id,
@@ -119,8 +119,8 @@
       <if test="modifyTime != null" >
         #{modifyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdUserId != null" >
-        #{createdUserId,jdbcType=INTEGER},
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
       </if>
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
@@ -160,8 +160,8 @@
       <if test="modifyTime != null" >
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdUserId != null" >
-        created_user_id = #{createdUserId,jdbcType=INTEGER},
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
@@ -181,7 +181,7 @@
       change_status = #{changeStatus,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      created_user_id = #{createdUserId,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_user_id = #{modifyUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

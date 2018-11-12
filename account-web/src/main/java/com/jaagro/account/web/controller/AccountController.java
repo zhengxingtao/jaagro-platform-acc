@@ -102,9 +102,9 @@ public class AccountController {
      * @param queryAccountDto
      * @return
      */
-    @PostMapping("/getAccountDto")
+    @PostMapping("/getByQueryAccountDto")
     @ApiOperation("查询账户信息")
-    public AccountReturnDto getAccountDto(@RequestBody @Validated QueryAccountDto queryAccountDto){
+    public AccountReturnDto getByQueryAccountDto(@RequestBody @Validated QueryAccountDto queryAccountDto){
         log.debug("getAccountDto begin,{}",JSON.toJSONString(queryAccountDto));
         AccountReturnDto accountDto = accountService.getByQueryAccountDto(queryAccountDto);
         if (accountDto == null){
