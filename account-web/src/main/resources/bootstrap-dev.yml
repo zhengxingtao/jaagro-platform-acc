@@ -1,11 +1,114 @@
 spring:
-  cloud:
-    config:
-      name: jaagro-config-account-8020-client    #需要从github上读取的资源名称，注意没有yml后缀名
-      profile: dev
-      label: master
-      uri: http://47.97.193.119:9040     #SpringCloudConfig获取的服务地址
-
-  # 日志输出
   profiles:
-    active: dev
+    active:
+    - dev
+---
+
+server:
+  port: 8020
+spring:
+  profiles: dev
+  application:
+    name: account
+  datasource:
+    username: root
+    password: 123456
+    #    url: jdbc:mysql:///accountserver?useSSL=true&useUnicode=true&characterEncoding=utf8   #本地数据库
+    url: jdbc:mysql://139.196.144.63:3306/accountserver?useUnicode=true&characterEncoding=utf8   #测试数据库
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #  druid数据源配置文件
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    useGlobalDataSourceStat: true
+    connectionProperties=druid.stat.mergeSql=true;druid.stat.slowSqlMillis: 5000
+  # 日期格式化
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+  aop:
+    auto: true
+  cache:
+    type: redis
+
+#  #    配置rabbitmq主机
+#  rabbitmq:
+#    host: 116.62.120.61
+#    #    访问端口
+#    port: 5672
+#    #    安装rabbitmq时配置的用户名
+#    username: guest
+#    #    安装RabbitMQ时配置的密码
+#    password: guest
+
+  # redis
+  redis:
+    database: 1
+    password:
+    host: localhost
+    port: 6379
+    #    password:
+    pool:
+      #      最大连接数
+      max-active: 8
+      #      最大阻塞等待时间（负数表示没有限制）
+      max-wait: 1
+      #      最大空闲连接
+      max-idle: 8
+      #      最小空闲链接
+      min-idle: 0
+    #      链接超时时间（毫秒）
+    timeout: 0
+
+# 开启hystrix -- 这个虽然出错了，但是必须要加，否则报错
+feign:
+  hystrix:
+    enabled: true
+#eureka配置
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    #续约更新时间间隔设置5秒，m默认30s
+    lease-renewal-interval-in-seconds: 5
+    #续约到期时间10秒，默认是90秒
+    lease-expiration-duration-in-seconds: 10
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/
+
+# mybatis配置
+mybatis:
+  mapper-locations: classpath*:/mapper/*.xml
+  typeAliasesPackage: com.jaagro.account.biz.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+#pagehelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+logging:
+  level:
+    com:
+      jaagro:
+        account:
+          biz:
+            mapper: debug
