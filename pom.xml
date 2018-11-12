@@ -26,5 +26,4 @@
         <module>account-biz</module>
         <module>account-web</module>
     </modules>
-
 </project>
