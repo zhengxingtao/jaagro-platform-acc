@@ -1,8 +1,5 @@
 package com.jaagro.account.biz.entity;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -70,7 +67,7 @@ public class Account implements Serializable{
     /**
      * 创建人
      */
-    private Integer createdUserId;
+    private Integer createUserId;
 
     /**
      * 修改人
@@ -255,18 +252,18 @@ public class Account implements Serializable{
 
     /**
      * 创建人
-     * @return created_user_id 创建人
+     * @return create_user_id 创建人
      */
-    public Integer getCreatedUserId() {
-        return createdUserId;
+    public Integer getcreateUserId() {
+        return createUserId;
     }
 
     /**
      * 创建人
-     * @param createdUserId 创建人
+     * @param createUserId 创建人
      */
-    public void setCreatedUserId(Integer createdUserId) {
-        this.createdUserId = createdUserId;
+    public void setcreateUserId(Integer createUserId) {
+        this.createUserId = createUserId;
     }
 
     /**

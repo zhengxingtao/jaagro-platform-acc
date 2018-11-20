@@ -74,7 +74,7 @@ public class AccountVo implements Serializable {
     /**
      * 创建人
      */
-    private Integer createdUserId;
+    private Integer createUserId;
 
     /**
      * 修改人

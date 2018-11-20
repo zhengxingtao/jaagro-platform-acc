@@ -72,12 +72,13 @@ public class UpdateAccountDto implements Serializable{
     /**
      * 创建人
      */
-    @Min(value =1,message = "{createdUserId.Min}")
-    private Integer createdUserId;
+    @Min(value =1,message = "{createUserId.Min}")
+    private Integer createUserId;
 
     /**
      * 修改人
      */
+    @NotNull(message = "{modifyUserId.NotNull}")
     @Min(value =1,message = "{modifyUserId.Min}")
     private Integer modifyUserId;
 }

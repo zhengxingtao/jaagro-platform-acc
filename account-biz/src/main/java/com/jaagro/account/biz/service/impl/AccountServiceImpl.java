@@ -96,7 +96,6 @@ public class AccountServiceImpl implements AccountService {
      * @param id
      * @return
      */
-    @CacheEvict(cacheNames = "account",allEntries = true)
     @Override
     public boolean disableAccount(Integer id) {
         Account account = accountMapperExt.selectByPrimaryKey(id);
@@ -120,7 +119,6 @@ public class AccountServiceImpl implements AccountService {
      * @param queryAccountDto
      * @return
      */
-    @Cacheable
     @Override
     public AccountReturnDto getByQueryAccountDto(QueryAccountDto queryAccountDto) {
         Account account = accountMapperExt.selectActiveAccount(queryAccountDto.getAccountType(),queryAccountDto.getUserId(),queryAccountDto.getUserType());
@@ -138,7 +136,6 @@ public class AccountServiceImpl implements AccountService {
      * @param batchDeleteAccountDto
      * @return
      */
-    @CacheEvict(cacheNames = "account",allEntries = true)
     @Override
     public boolean batchDisableAccount(BatchDeleteAccountDto batchDeleteAccountDto) {
         Integer currentUserId = currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId();
@@ -159,6 +156,5 @@ public class AccountServiceImpl implements AccountService {
         account.setCreateTime(new Date());
         account.setCredit(new BigDecimal("0"));
         account.setDebit(new BigDecimal("0"));
-        account.setCreatedUserId(currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId());
     }
 }

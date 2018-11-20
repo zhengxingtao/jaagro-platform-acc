@@ -34,4 +34,10 @@ public class CreateAccountDto implements Serializable{
     @NotNull(message = "{accountType.NotNull}")
     @Min(value = 1,message = "{accountType.Min}")
     private Integer accountType;
+    /**
+     * 创建人用户id
+     */
+    @NotNull(message = "{createUserId.NotNull}")
+    @Min(value = 1,message = "{createUserId.Min}")
+    private Integer createUserId;
 }
