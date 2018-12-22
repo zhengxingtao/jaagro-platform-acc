@@ -1,17 +1,13 @@
 package com.jaagro.account.biz.config;
 
-import java.util.Properties;
-
 import com.jaagro.account.biz.exception.VersionLockException;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
-import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.plugin.*;
 import org.springframework.stereotype.Component;
+
+import java.util.Properties;
 
 
 /**
@@ -20,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
 @Component
-public class MybaticVersionInterceptor implements Interceptor {
+public class MybatisVersionInterceptor implements Interceptor {
 
 	/*
 	 * (non-Javadoc)
