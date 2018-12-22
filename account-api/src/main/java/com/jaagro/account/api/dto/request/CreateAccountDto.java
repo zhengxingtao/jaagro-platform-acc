@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class CreateAccountDto implements Serializable{
 
+    private static final long serialVersionUID = -2794054642508531240L;
     /**
      * 用户id
      */

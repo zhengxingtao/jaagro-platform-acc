@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class UpdateAccountDto implements Serializable{
 
+    private static final long serialVersionUID = -3667373826701820944L;
     /**
      * 账户id
      */

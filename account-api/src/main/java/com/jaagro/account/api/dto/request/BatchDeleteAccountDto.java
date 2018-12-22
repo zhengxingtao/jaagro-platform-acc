@@ -17,6 +17,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class BatchDeleteAccountDto implements Serializable {
+    private static final long serialVersionUID = 2037643940594919053L;
     /**
      * 用户id列表
      */

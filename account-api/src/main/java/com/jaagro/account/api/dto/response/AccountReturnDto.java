@@ -15,6 +15,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class AccountReturnDto implements Serializable{
+    private static final long serialVersionUID = 7384050088646768159L;
     /**
      * 账户id
      */

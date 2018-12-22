@@ -9,4 +9,5 @@ import java.io.Serializable;
  */
 public class AccountQuery implements Serializable{
 
+    private static final long serialVersionUID = 5338251138453733309L;
 }

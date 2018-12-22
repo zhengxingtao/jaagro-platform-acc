@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 public class QueryAccountDto implements Serializable{
+    private static final long serialVersionUID = -3096757730719274416L;
     /**
      * 用户id
      */
