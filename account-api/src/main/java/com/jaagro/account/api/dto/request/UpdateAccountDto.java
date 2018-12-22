@@ -79,7 +79,5 @@ public class UpdateAccountDto implements Serializable{
     /**
      * 修改人
      */
-    @NotNull(message = "{modifyUserId.NotNull}")
-    @Min(value =1,message = "{modifyUserId.Min}")
     private Integer modifyUserId;
 }

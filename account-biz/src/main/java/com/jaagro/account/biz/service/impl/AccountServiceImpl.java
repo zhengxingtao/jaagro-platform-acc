@@ -32,8 +32,6 @@ import java.util.HashSet;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountMapperExt accountMapperExt;
-    @Autowired
-    private CurrentUserService currentUserService;
     /**
      * 创建账户
      *
@@ -65,7 +63,6 @@ public class AccountServiceImpl implements AccountService {
         Account account = new Account();
         BeanUtils.copyProperties(updateAccountDto,account);
         account.setModifyTime(new Date());
-        account.setModifyUserId(currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId());
         int i = accountMapperExt.updateByPrimaryKeySelective(account);
         if (i < 1){
             return false;
@@ -105,7 +102,6 @@ public class AccountServiceImpl implements AccountService {
         }
         account.setAccountStatus(AccountStatus.FREEZE);
         account.setModifyTime(new Date());
-        account.setModifyUserId(currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId());
         int result = accountMapperExt.updateByPrimaryKeySelective(account);
         if (result == 1){
             return true;
@@ -138,8 +134,6 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public boolean batchDisableAccount(BatchDeleteAccountDto batchDeleteAccountDto) {
-        Integer currentUserId = currentUserService.getCurrentUser() == null ? null : currentUserService.getCurrentUser().getId();
-        batchDeleteAccountDto.setModifyUserId(currentUserId);
         Integer effective = accountMapperExt.batchDisableAccount(batchDeleteAccountDto);
         // 防止userId重复
         if(effective == new HashSet<>(batchDeleteAccountDto.getUserIdList()).size()){
